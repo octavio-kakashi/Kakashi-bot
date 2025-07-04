@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>𝙺𝙰𝙺𝙰𝚂𝙷𝚒 AI</title>
+  <style>
+    body {
+      background:#111;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 { color: #00ffc8; }
+    #chatbox {
+      width: 100%;
+      max-width: 600px;
+      height: 400px;
+      background: #222;
+      overflow-y: auto;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .message { margin: 5px 0; }
+    .user { color: #00bfff; }
+    .message{color: red#00ff94; }
+    #inputForm {
+      display: flex;
+      max-width: 600px;
+      width: 100%;
+    }
+    #inputQuestion {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px 0 0 6px;
+    }
+    #submitBtn, #historyBtn {
+      padding: 10px;
+      background: #00ffc8;
+      border: none;
+      color: #111;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #submitBtn { border-radius: 0 6px 6px 0; }
+    #historyBtn {
+      margin-top: 10px;
+      border-radius: 6px;
+      width: 100%;
+      max-width: 600px;
+    }
+  </style>
+</head>
+<body>
+  <h1>𝙺𝙰𝙺𝙰𝚂𝙷𝙸 AI</h1>
+  <div id="chatbox"></div>
+  <form id="inputForm">
+    <input type="text" id="inputQuestion" placeholder="Pose ta question..." required />
+    <button type="submit" id="submitBtn">Envoyer</button>
+  </form>
+  <button id="historyBtn">Voir l'historique</button>
+
+  <script>
+    const chatbox = document.getElementById('chatbox');
+    const form = document.getElementById('inputForm');
+    const input = document.getElementById('inputQuestion');
+    const historyBtn = document.getElementById('historyBtn');
+
+    function addMessage(text, sender) {
+      const div = document.createElement('div');
+      div.className = 'message ' + sender;
+      div.textContent = (sender === 'user' ? 'Vous : ' : '�𝙺𝙰𝙺𝙰𝚂𝙷𝙸 AI : ') + text;
+      chatbox.appendChild(div);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+
+    function saveQuestion(question) {
+ const history = JSON.parse(localStorage.getItem('dav_history') || '[]');
+      history.push(question);
+      localStorage.setItem('oct_history', JSON.stringify(history));
+    }
+
+    function isAboutCreator(text) {
+      const t = text.toLowerCase();
+      return t.includes("qui t'a créé") || t.includes("ton créateur") || t.includes("qui es-tu") || t.includes("tu es qui") || t.includes("davbot");
+    }
+
+    async function askGemini(prompt) {
+      const apiKey = 'AIzaSyAaZkM5zG11lrotfZfkKyts-TbKheHr05o';
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+      const body = {
+        contents: [{ parts: [{ text: prompt }] }]
+      };
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || "Je n'ai pas compris.";
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const question = input.value.trim();
+      if (!question) return;
+      addMessage(question, 'user');
+      saveQuestion(question);
+      input.value = '';
+      
+      let reply = "Je réfléchis...";
+  if (isAboutCreator(question)) {
+        reply = "Bonjour ! Je suis Davbot AI, une intelligence artificielle créée par David Mpongo 😇. Je suis un grand modèle de langage conçu pour vous aider !";
+      } else {
+        reply = await askGemini(question);
+      }
+      addMessage(reply, 'bot');
+    });
+
+    historyBtn.onclick = () => {
+      const history = JSON.parse(localStorage.getItem('dav_history') || '[]');
+      if (history.length === 0) {
+        alert("Aucune question posée.");
+      } else {
+        alert("Historique :\n" + history.join("\n"));
+      }
+    };
+  </script>
+</body>
+</html>
