@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CODEUR OCTAVIO</title>
+  <style>
+    body {
+      background-color: rgba(0, 0, 0, 0.9);
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    @keyframes feu {
+      0% {
+        color: red;
+        text-shadow: 0 0 10px orange;
+      }
+
+      50% {
+        color: orange;
+        text-shadow: 0 0 20px yellow;
+      }
+
+      100% {
+        color: red;
+        text-shadow: 0 0 10px orange;
+      }
+    }
+
+    h1 {
+      animation: feu 1s infinite;
+    }
+
+    button {
+      animation: feu 1s infinite;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid orange;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      background-color: rgba(255, 100, 0, 0.4);
+    }
+button { 
+               background-color: green;
+               color: withe;
+               padding: 10px;
+               border: none;
+               border:raduis-5;
+    img {
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      border-radius: 8px;
+    }
+
+    img:hover {transform: scale(1.05);
+      box-shadow: 0 0 20px 5px rgba(255, 140, 0, 0.7);
+    }
+  </style>
+</head>
+
+<body>
+  <hr />
+  <h1>BIENVENUE CHEZ OCTAVIO</h1>
+  <hr />
+  <p>JE VOUS PRÉSENTE MON SITE WEB</p>
+  <img src="https://files.catbox.moe/hxlsoc.webp" width="350px" alt="oxtavio" />
+
+  <br /><br />
+
+  <a href="index2.html">
+    <button>info</button>
+  </a>
+</body>
+
+</html>
